@@ -92,6 +92,10 @@ const proxies: { pathSegment: string; target: string; orHostname?: string }[] =
       pathSegment: "googleapis-cloudcode-pa",
       target: "https://cloudcode-pa.googleapis.com",
     },
+    {
+      pathSegment: "horoscope",
+      target: "https://horoscope-app-api.vercel.app",
+    },
   ]
 
 app.post(

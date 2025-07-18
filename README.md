@@ -46,3 +46,12 @@ Deploy this as a Docker container, check out [Dockerfile](./Dockerfile).
 ## License
 
 MIT.
+
+## Docker
+
+``` bash
+docker build --no-cache -t ai-proxy .  && \
+docker stop ai-proxy     && \
+docker rm   ai-proxy     && \
+docker run -d -p 3000:3000 --name ai-proxy ai-proxy
+```
