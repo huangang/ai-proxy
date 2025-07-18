@@ -43,15 +43,37 @@ Use the hosted API, for example OpenAI `https://ai-proxy.chatwise.app/openai/v1`
 
 Deploy this as a Docker container, check out [Dockerfile](./Dockerfile).
 
+## Configuration
+
+The proxy rules are loaded from a configuration file. You can create `config.yaml`, `config.yml`, or `config.json` in the root directory of the project. A `config.yaml` example is provided.
+
+The application will look for these files in order, and use the first one it finds. If no configuration file is found, the proxy will run with no rules.
+
+This allows you to change proxy rules without rebuilding the Docker image.
+
 ## License
 
 MIT.
 
 ## Docker
 
-``` bash
-docker build --no-cache -t ai-proxy .  && \
-docker stop ai-proxy     && \
-docker rm   ai-proxy     && \
-docker run -d -p 3000:3000 --name ai-proxy ai-proxy
+To build the Docker image, run:
+```bash
+docker build -t ai-proxy .
+```
+
+To run the container and mount a local configuration file, use the `-v` flag. This is the recommended way to run the proxy, as it allows you to update the configuration without rebuilding the image.
+
+Create a `config.yaml` file on your host machine, then run the following command:
+
+```bash
+docker run -d -p 3000:3000 \
+  -v $(pwd)/config.yaml:/app/config.yaml \
+  --name ai-proxy \
+  ai-proxy
+```
+
+After making changes to your local `config.yaml`, you only need to restart the container for the changes to take effect:
+```bash
+docker restart ai-proxy
 ```

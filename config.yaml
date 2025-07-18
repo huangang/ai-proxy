@@ -1,0 +1,28 @@
+# Proxy configuration for AI-Proxy
+# Add your proxy rules here.
+# The server will look for config.yaml, config.yml, or config.json in the root directory.
+
+proxies:
+  - pathSegment: "generativelanguage"
+    orHostname: "gooai.chatkit.app"
+    target: "https://generativelanguage.googleapis.com"
+  - pathSegment: "groq"
+    target: "https://api.groq.com"
+  - pathSegment: "anthropic"
+    target: "https://api.anthropic.com"
+  - pathSegment: "pplx"
+    target: "https://api.perplexity.ai"
+  - pathSegment: "openai"
+    target: "https://api.openai.com"
+  - pathSegment: "mistral"
+    target: "https://api.mistral.ai"
+  - pathSegment: "openrouter/api"
+    target: "https://openrouter.ai/api"
+  - pathSegment: "openrouter"
+    target: "https://openrouter.ai/api"
+  - pathSegment: "xai"
+    target: "https://api.x.ai"
+  - pathSegment: "googleapis-cloudcode-pa"
+    target: "https://cloudcode-pa.googleapis.com"
+  - pathSegment: "horoscope"
+    target: "https://horoscope-app-api.vercel.app"

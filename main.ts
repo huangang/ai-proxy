@@ -4,6 +4,49 @@ import { zValidator } from "@hono/zod-validator"
 import { z } from "zod"
 import { logger } from "hono/logger"
 import { proxy } from "hono/proxy"
+import fs from "node:fs"
+import path from "node:path"
+import yaml from "js-yaml"
+
+// Define types for config
+type ProxyConfig = {
+  pathSegment: string
+  target: string
+  orHostname?: string
+}
+
+type Config = {
+  proxies: ProxyConfig[]
+}
+
+// Function to load proxies from config file
+const loadProxies = (): ProxyConfig[] => {
+  const configPaths = [
+    path.join(process.cwd(), "config.yaml"),
+    path.join(process.cwd(), "config.yml"),
+    path.join(process.cwd(), "config.json"),
+  ]
+
+  for (const configPath of configPaths) {
+    if (fs.existsSync(configPath)) {
+      try {
+        const fileContents = fs.readFileSync(configPath, "utf8")
+        if (configPath.endsWith(".json")) {
+          const config = JSON.parse(fileContents) as Config
+          return config.proxies || []
+        } else {
+          const config = yaml.load(fileContents) as Config
+          return config.proxies || []
+        }
+      } catch (error) {
+        console.error(`Error loading or parsing config file at ${configPath}:`, error)
+        return []
+      }
+    }
+  }
+
+  return [] // Return empty array if no config file is found
+}
 
 const app = new Hono()
 
@@ -49,54 +92,7 @@ const fetchWithTimeout = async (
   }
 }
 
-const proxies: { pathSegment: string; target: string; orHostname?: string }[] =
-  [
-    {
-      pathSegment: "generativelanguage",
-      orHostname: "gooai.chatkit.app",
-      target: "https://generativelanguage.googleapis.com",
-    },
-    {
-      pathSegment: "groq",
-      target: "https://api.groq.com",
-    },
-    {
-      pathSegment: "anthropic",
-      target: "https://api.anthropic.com",
-    },
-    {
-      pathSegment: "pplx",
-      target: "https://api.perplexity.ai",
-    },
-    {
-      pathSegment: "openai",
-      target: "https://api.openai.com",
-    },
-    {
-      pathSegment: "mistral",
-      target: "https://api.mistral.ai",
-    },
-    {
-      pathSegment: "openrouter/api",
-      target: "https://openrouter.ai/api",
-    },
-    {
-      pathSegment: "openrouter",
-      target: "https://openrouter.ai/api",
-    },
-    {
-      pathSegment: "xai",
-      target: "https://api.x.ai",
-    },
-    {
-      pathSegment: "googleapis-cloudcode-pa",
-      target: "https://cloudcode-pa.googleapis.com",
-    },
-    {
-      pathSegment: "horoscope",
-      target: "https://horoscope-app-api.vercel.app",
-    },
-  ]
+const proxies: ProxyConfig[] = loadProxies()
 
 app.post(
   "/custom-model-proxy",

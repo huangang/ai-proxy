@@ -34,6 +34,10 @@ RUN bun i --prod
 # Copy built code from the builder stage
 COPY --from=builder /app/dist ./dist
 
+# Copy config file if it exists
+COPY --from=builder /app/config.yaml* ./
+COPY --from=builder /app/config.json* ./
+
 ENV NODE_ENV=production
 ENV PORT=3000
 
