@@ -77,3 +77,15 @@ After making changes to your local `config.yaml`, you only need to restart the c
 ```bash
 docker restart ai-proxy
 ```
+
+### Full Re-deployment
+
+For a clean re-deployment (e.g., after rebuilding the image), you can use the following command to stop, remove, and run the new container in one go:
+```bash
+docker stop ai-proxy && \
+docker rm ai-proxy && \
+docker run -d -p 3000:3000 \
+  -v $(pwd)/config.yaml:/app/config.yaml \
+  --name ai-proxy \
+  ai-proxy
+```
