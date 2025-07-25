@@ -26,3 +26,5 @@ proxies:
     target: "https://cloudcode-pa.googleapis.com"
   - pathSegment: "horoscope"
     target: "https://horoscope-app-api.vercel.app"
+  - pathSegment: "huggingface"
+    target: "https://router.huggingface.co"
