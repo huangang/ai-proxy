@@ -28,3 +28,6 @@ proxies:
     target: "https://horoscope-app-api.vercel.app"
   - pathSegment: "huggingface"
     target: "https://router.huggingface.co"
+  - pathSegment: "poe"
+    target: "https://api.poe.com"
+    
